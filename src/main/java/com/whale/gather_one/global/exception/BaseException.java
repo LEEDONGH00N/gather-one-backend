@@ -1,29 +1,25 @@
 package com.whale.gather_one.global.exception;
 
 import com.whale.gather_one.global.exception.error.ErrorCode;
-import com.whale.gather_one.global.exception.response.ErrorResponse;
 import lombok.Getter;
 
 @Getter
 public class BaseException extends RuntimeException {
 
-    private final ErrorCode code;
+    private final ErrorCode errorCode;
     private String customErrorMessage;
 
     private BaseException(ErrorCode code) {
-        this.code = code;
+        this.errorCode = code;
     }
 
     private BaseException(ErrorCode code, final String message) {
-        this.code = code;
+        this.errorCode = code;
         this.customErrorMessage = message;
     }
 
-    public ErrorResponse generateErrorResponse(){
-        if(customErrorMessage == null) {
-            return ErrorResponse.fromDefault(code);
-        }
-        return ErrorResponse.fromCustom(code, customErrorMessage);
+    public boolean hasCustomMessage(){
+        return customErrorMessage != null;
     }
 
     public static BaseException from(ErrorCode errorCode) {

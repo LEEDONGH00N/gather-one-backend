@@ -2,7 +2,7 @@ package com.whale.gather_one.global.exception.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
-import com.whale.gather_one.global.exception.error.ErrorCode;
+import com.whale.gather_one.global.exception.BaseException;
 import com.whale.gather_one.global.exception.error.ErrorDisplayType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,11 +18,16 @@ public class ErrorResponse {
     private final String message;
     private final ErrorDisplayType displayType;
 
-    public static ErrorResponse fromDefault(ErrorCode errorCode){
-        return new ErrorResponse(errorCode.getCode(), errorCode.getMessage(), errorCode.getDisplayType());
-    }
-
-    public static ErrorResponse fromCustom(ErrorCode errorCode, String customMessage){
-        return new ErrorResponse(errorCode.getCode(), customMessage, errorCode.getDisplayType());
+    public static ErrorResponse generateErrorResponse(BaseException baseException){
+        if(baseException.hasCustomMessage()) {
+            return new ErrorResponse(
+                    baseException.getErrorCode().getCode(),
+                    baseException.getCustomErrorMessage(),
+                    baseException.getErrorCode().getDisplayType());
+        }
+        return new ErrorResponse(
+                baseException.getErrorCode().getCode(),
+                baseException.getErrorCode().getMessage(),
+                baseException.getErrorCode().getDisplayType());
     }
 }
