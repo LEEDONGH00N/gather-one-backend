@@ -17,6 +17,6 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(BaseException.class)
     public ErrorResponse onThrowException(BaseException baseException) {
-        return ErrorResponse.onFailure(baseException.getErrorReason());
+        return baseException.generateErrorResponse();
     }
 }

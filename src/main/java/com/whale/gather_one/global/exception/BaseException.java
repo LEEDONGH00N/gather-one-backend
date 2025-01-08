@@ -1,7 +1,7 @@
 package com.whale.gather_one.global.exception;
 
 import com.whale.gather_one.global.exception.error.ErrorCode;
-import com.whale.gather_one.global.exception.error.ErrorCodeDto;
+import com.whale.gather_one.global.exception.response.ErrorResponse;
 import lombok.Getter;
 
 @Getter
@@ -19,18 +19,18 @@ public class BaseException extends RuntimeException {
         this.customErrorMessage = message;
     }
 
-    public ErrorCodeDto getErrorReason(){
+    public ErrorResponse generateErrorResponse(){
         if(customErrorMessage == null) {
-            return code.convertToDto();
+            return ErrorResponse.fromDefault(code);
         }
-        return code.convertToDtoWithCustomMessage(customErrorMessage);
+        return ErrorResponse.fromCustom(code, customErrorMessage);
     }
 
-    public static BaseException withDefaultMessage(ErrorCode errorCode) {
+    public static BaseException from(ErrorCode errorCode) {
         return new BaseException(errorCode);
     }
 
-    public static BaseException withCustomMessage(ErrorCode errorCode, final String customErrorMessage){
+    public static BaseException from(ErrorCode errorCode, final String customErrorMessage){
         return new BaseException(errorCode, customErrorMessage);
     }
 }
